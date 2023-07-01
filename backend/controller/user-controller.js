@@ -1,10 +1,20 @@
-const User = require("../model/user-model");
+const User = require("../model/user-model")
+const client = require("../config/redis/index")
 
 class UserController {
     async index(req, res) {
-        const users = await User.find()
-
-        return res.status(200).send({ message: "Success to get all users", listUsers: users })
+        client.get('allUsers', async (err, reply) => {
+            if (reply) {
+                console.log("Redis working...")
+                res.status(200).send({ message: "Success to get all users", listUsers: JSON.parse(reply) })
+            } else {
+                const users = await User.find()
+                    .then(user => {
+                        client.set('allUsers', JSON.stringify(user))
+                        return res.status(200).send({ message: "Success to get all users", listUsers: users })
+                    }).catch(err => res.status(500).send(err))
+            }
+        })
     }
 
     async store(req, res) {
