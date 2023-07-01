@@ -1,0 +1,50 @@
+version: '3.6'
+
+services:
+  app:
+    build:
+      dockerfile: backend/Dockerfile
+    container_name: BACKEND
+    expose:
+      - 3000
+    ports:
+      - 3000:3000
+    volumes:
+      - ./backend:/usr/src/app
+    networks:
+      app_network:
+        ipv4_address: 10.5.0.5
+
+  db:
+    image: 'mongo'
+    container_name: MONGO
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo_volume:/data/db
+
+  cache:
+    build:
+      dockerfile: backend/config/redis/Dockerfile
+    container_name: REDIS
+    ports:
+      - 6379:6379
+    volumes:
+        - redis_volume:/redis.conf
+    networks:
+      app_network:
+        ipv4_address: 10.5.0.6
+
+volumes:
+  app_volume:
+  mongo_volume:
+  redis_volume:
+
+
+networks:
+  app_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "10.5.0.0/24"
+          gateway: "10.5.0.1"
