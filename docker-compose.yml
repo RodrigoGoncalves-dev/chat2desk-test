@@ -11,6 +11,9 @@ services:
       - 3000:3000
     volumes:
       - ./backend:/usr/src/app
+    environment:
+      REDIS_HOST: redis_database
+      REDIS_PORT: 6379
     networks:
       app_network:
         ipv4_address: 10.5.0.5
