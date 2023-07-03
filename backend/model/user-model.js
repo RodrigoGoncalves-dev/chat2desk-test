@@ -1,4 +1,4 @@
-const mongoose = require("../config/mongo");
+const mongoose = require("../config/mongo/mongo");
 
 let Schema = mongoose.Schema;
 
