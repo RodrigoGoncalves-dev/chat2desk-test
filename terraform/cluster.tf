@@ -1,14 +1,24 @@
-provider "digitalocean" {
-    token = "dop_v1_4e024c73686229d7732d0f05d05cf453c102d77a7ff8ed8c265376a7ad67dbe7"
+terraform {
+  required_providers {
+    digitalocean = {
+      source  = "digitalocean/digitalocean"
+      version = "~> 2.0"
+    }
+  }
 }
 
-resource "digitalocean_kubernetes_cluster" "chat2desk-cluster" {
-    name       = "chat2desk-cluster"
-    region     = "nyc1"
-    version    = "1.21.2-do.0"
-    node_pool {
-        name       = "chat2desk-pool"
-        size       = "s-1vcpu-2gb"
-        node_count = 3
-    }
+provider "digitalocean" {
+  token = "dop_v1_f3224ba9152e50c795b31c2fded806bf0e4ef40be3a5ba2ed2e5cacea1807633"
+}
+
+resource "digitalocean_kubernetes_cluster" "chatdesk_cluster" {
+  name    = "chatdesk-cluster"
+  region  = "nyc1"
+  version = "1.27.2-do.0"
+
+  node_pool {
+    name       = "chatdesk-pool"
+    size       = "s-2vcpu-2gb"
+    node_count = 3
+  }
 }
